@@ -1,13 +1,15 @@
-package com.yunsi.work0810.frame;
-/*
- * 	管理界面类
- * 
- */
+package com.yunsi.work0810_2.frame;
+
 import java.util.Scanner;
 
 import com.yunsi.work0810.service.IHRManagement;
 import com.yunsi.work0810.service.impl.HRManagementImpl;
-
+/**
+ * 
+ * 	管理系统的界面设计
+ * @author ShenBL
+ *
+ */
 public class FrameUI {
 	IHRManagement ihr = new HRManagementImpl();
 	IHRManagement ihrm = new HRManagementImpl();
@@ -22,7 +24,7 @@ public class FrameUI {
 			System.out.println("=     3.更新人员信息              =");
 			System.out.println("=     4.显示人员信息              =");
 			System.out.println("=     5.显示所有信息              =");
-			System.out.println("=      6. 退    出                =");
+			System.out.println("=      6.  退    出                    =");
 			System.out.println("==========End==========");
 			
 			int start = sc.nextInt();
