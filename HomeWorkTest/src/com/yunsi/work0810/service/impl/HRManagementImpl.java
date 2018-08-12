@@ -28,7 +28,7 @@ public  class HRManagementImpl implements IHRManagement{
 			idx = temp.length;
 			//System.out.println(temp.length+"  " + person.length+" "+person[0].getPid());//check
 		}else {
-			HRManagementImpl hrmimpl = new HRManagementImpl(DEFAULT_LEN);
+			new HRManagementImpl(DEFAULT_LEN);
 		}	
 	}
 	public void save() {

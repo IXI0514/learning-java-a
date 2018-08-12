@@ -3,10 +3,6 @@ package com.yunsi.work0810;
 
 
 import com.yunsi.work0810.frame.FrameUI;
-import com.yunsi.work0810.service.IDiskHRManagement;
-import com.yunsi.work0810.service.IHRManagement;
-import com.yunsi.work0810.service.impl.DiskHRManagementImpl;
-import com.yunsi.work0810.service.impl.HRManagementImpl;
 
 
 public class Test {

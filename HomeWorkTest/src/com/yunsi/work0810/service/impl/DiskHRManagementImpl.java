@@ -5,16 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Reader;
 import java.io.Serializable;
-import java.io.Writer;
-import java.util.Arrays;
+
 
 import com.yunsi.work0810.beans.People;
 import com.yunsi.work0810.service.IDiskHRManagement;
@@ -38,7 +34,7 @@ public class DiskHRManagementImpl implements IDiskHRManagement,Serializable  {
 		if(!DATA_PATH.exists()) {
 			File str = DATA_PATH.getParentFile();
 			str.mkdirs();
-			File file= new File(str.getPath(),"data.txt");
+			new File(str.getPath(),"data.txt");
 		}
 		try {
 			fo = new FileOutputStream(DATA_PATH);
