@@ -47,6 +47,8 @@ public class FrameUI {
 		String name =sc.next();
 		System.out.print("=     年龄：   ");
 		int age =sc.nextInt();
+	
+		
 		System.out.print("=     性别：   ");
 		String sex =sc.next();
 		System.out.print("=     职业(t:教师，s:学生)：   ");		
