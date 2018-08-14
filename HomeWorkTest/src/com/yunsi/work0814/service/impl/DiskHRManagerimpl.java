@@ -1,4 +1,4 @@
-package com.yunsi.work0813.service.impl;
+package com.yunsi.work0814.service.impl;
 
 
 
@@ -12,25 +12,24 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 
-import com.yunsi.work0813.beans.People;
-import com.yunsi.work0813.beans.sub.Athlete;
-import com.yunsi.work0813.beans.sub.Doctor;
-import com.yunsi.work0813.beans.sub.Teacher;
-import com.yunsi.work0813.exception.HRMException;
-import com.yunsi.work0813.frame.MainUI;
-import com.yunsi.work0813.service.HRManagerIF;
+import com.yunsi.work0814.beans.People;
+import com.yunsi.work0814.beans.sub.Athlete;
+import com.yunsi.work0814.beans.sub.Doctor;
+import com.yunsi.work0814.beans.sub.Teacher;
+import com.yunsi.work0814.exception.HRMException;
+import com.yunsi.work0814.frame.MainUI;
+import com.yunsi.work0814.service.HRManagerIF;
 /**
  * 
- * 	基于磁盘实现HRM 字符流
+ * 	基于磁盘实现HRM
  * @author ShenBL
  *
  */
-public class HRManagerimpl implements HRManagerIF{
-	final String PATH = "e:/temp/temp.txt";//文件位置
+public class DiskHRManagerimpl implements HRManagerIF{
+	final static String PATH = "e:/temp/temp.txt";//文件位置
 	
 	//初始化文件
-	@Override
-	public void reset() {
+	private static void reset() {
 		File file = new File(PATH);
 		if(!file.exists()) {
 			File str = file.getParentFile();
@@ -140,8 +139,11 @@ public class HRManagerimpl implements HRManagerIF{
 	}
 	//显示所有
 	@Override
-	public void showAll() {
+	public void showAll() throws HRMException {
 		People[] peoples = this.Demo();
+		if(peoples.length==1) {
+			throw new HRMException("当前无在册人员！！");
+		}
 		for(int i=0;i<peoples.length-1;i++) {
 			System.out.println("\n"+peoples[i].showInfo()+"\n");
 		}
