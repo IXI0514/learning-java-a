@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public  class  MenHRManagerimpl implements HRManagerIF{
-	public static List list = new LinkedList();
+	public static List<People> list = new LinkedList();
 	
 	/**
 	 * 查找pid是否存在，存在就返回People
@@ -21,8 +21,9 @@ public  class  MenHRManagerimpl implements HRManagerIF{
 	 * @return
 	 */
 	private People find(String pid) {
-		for(Object people : list ) {
-			 People pp = (People)people; 
+		System.out.println("执行了find。。。。");
+		for(People people : list ) {
+			 People pp = people; 
 			 if(pp.getPid().equals(pid)) {
 				 return pp;
 			 }
@@ -56,7 +57,7 @@ public  class  MenHRManagerimpl implements HRManagerIF{
 			throw new HRMException("输入的编号不存在，无法更新！！");	
 		}
 		
-		People pold = (People)find(pid);
+		People pold = find(pid);
 		MainUI ui = new MainUI();//调用更新输入界面
 		People pnew = ui.common();//更新的信息
 		if(find(pnew.getPid())!=null){//检查新信息中的id是否已存在
@@ -81,7 +82,7 @@ public  class  MenHRManagerimpl implements HRManagerIF{
 		if(find(pid)==null){
 			throw new HRMException("输入的编号不存在，无法显示信息！！");	
 		}
-		People p= (People)find(pid);
+		People p= find(pid);
 		System.out.println("\n"+p.showInfo()+"\n");
 	}
 
@@ -90,8 +91,8 @@ public  class  MenHRManagerimpl implements HRManagerIF{
 		if(list.isEmpty()) {
 			throw new HRMException("当前无在册人员！！");
 		}
-		for(Object object : list) {
-			People people = (People)object;
+		for(People object : list) {
+			People people = object;
 			System.out.println("\n"+people.showInfo()+"\n");
 		}
 	}
