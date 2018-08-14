@@ -98,6 +98,10 @@ public class HRManagerimpl implements HRManagerIF{
 		People people = ui.common();//更新的信息
 		String job0 = find(pid).getJob();
 		String job = people.getJob();
+	
+		if(find(people.getPid())!=null){//检查新信息中的id是否已存在
+			throw new HRMException("输入的编号已被占用！！");	
+		}
 		if(!job0.equals(job)){//如果职业不同不能更换
 			throw new HRMException("职业不同，不支持更新！！");	
 		}
@@ -153,7 +157,7 @@ public class HRManagerimpl implements HRManagerIF{
 		return null;	
 	}
 	
-	//获取整个文档中的信息 存在数组中
+	//获取整个文档中的信息 存在数组中 方便匹配查找
 	private People[] Demo() {
 		People[] p = new People[1];
 		int index = 0;

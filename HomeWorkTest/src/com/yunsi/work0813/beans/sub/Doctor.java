@@ -26,7 +26,7 @@ public class Doctor extends People {
 	}
 	@Override
 	public String showInfo() {
-		return super.showCommonInfo()+"、医院："+getHospital()+"、医科"+getDtype()+" ]";
+		return super.showCommonInfo()+"、医院："+getHospital()+"、医属："+getDtype()+" ]";
 	}
 	
 	//geter &&seter

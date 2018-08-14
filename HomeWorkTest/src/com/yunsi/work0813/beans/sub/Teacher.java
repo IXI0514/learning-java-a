@@ -39,7 +39,7 @@ public class Teacher extends People {
 	}
 	@Override
 	public String showInfo() {
-		String str= super.showCommonInfo()+"、学校："+getSchool()+"、授课"+getCourse()+" ]";
+		String str= super.showCommonInfo()+"、学校："+getSchool()+"、授课："+getCourse()+" ]";
 		return str;
 	}
 

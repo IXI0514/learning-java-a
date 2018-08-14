@@ -31,7 +31,7 @@ public abstract class People {
 	
 	public  String showCommonInfo() {
 		
-		String str = "[ "+"编号"+getPid()+"、姓名"+getName()+"、性别"+getSex()+"、年龄"+getAge()+"、职业"+getJob();
+		String str = "[ "+"编号："+getPid()+"、姓名："+getName()+"、性别："+getSex()+"、年龄："+getAge()+"、职业："+getJob();
 		return str;
 	}
 	public abstract String showInfo() ;
