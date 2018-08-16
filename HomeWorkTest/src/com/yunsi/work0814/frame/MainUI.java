@@ -19,11 +19,7 @@ public class MainUI {
 	Scanner sc = new Scanner(System.in);
 	private HRManagerIF ihr;
 	public MainUI()  {
-		try {
-			ihr = HRMnagerFactory.autofactory();
-		} catch (HRMException e) {
-			System.out.println(e);
-		}
+		ihr = HRMnagerFactory.autofactory();
 	}
 	public void start() {//¿ªÊ¼
 		outer:while(true) {

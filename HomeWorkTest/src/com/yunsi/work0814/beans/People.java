@@ -1,12 +1,14 @@
 package com.yunsi.work0814.beans;
 
+import com.yunsi.work0815.bean.Student;
+
 /**
  * People抽象类
  *	作为父类，提供共有特征
  * @author ShenBL
  *
  */
-public abstract class People {
+public  abstract class People implements Comparable<People>{
 	private String pid;//编号
 	private String name;//姓名
 	private String sex;//性别
@@ -67,6 +69,37 @@ public abstract class People {
 	public void setJob(String job) {
 		this.job = job;
 	}
-
+	@Override
+	public int compareTo(People o) {
+		int com = this.getPid().compareTo(o.getPid());
+		return com==0?1:com;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pid == null) ? 0 : pid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		People other = (People) obj;
+		if (pid == null) {
+			if (other.pid != null) {
+				System.out.println("编号重复，添加失败！！");
+				return false;
+			}
+				
+		} else if (!pid.equals(other.pid))
+			return false;
+		return true;
+	}
+	
 
 }

@@ -28,8 +28,8 @@ import com.yunsi.work0814.service.HRManagerIF;
 public class DiskHRManagerimpl implements HRManagerIF{
 	final static String PATH = "e:/temp/temp.txt";//文件位置
 	
-	//初始化文件
-	private static void reset() {
+	//初始化文件	
+	public DiskHRManagerimpl() {
 		File file = new File(PATH);
 		if(!file.exists()) {
 			File str = file.getParentFile();
@@ -42,8 +42,6 @@ public class DiskHRManagerimpl implements HRManagerIF{
 		}
 	}
 	
-
-
 	//添加人员信息
 	@Override
 	public void add(People p) throws HRMException {

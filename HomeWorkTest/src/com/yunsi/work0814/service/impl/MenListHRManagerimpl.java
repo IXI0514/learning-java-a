@@ -1,4 +1,4 @@
-package com.yunsi.work0814.service.impl;
+	package com.yunsi.work0814.service.impl;
 
 
 import com.yunsi.work0814.beans.People;
@@ -11,15 +11,17 @@ import com.yunsi.work0814.service.HRManagerIF;
 
 import java.util.LinkedList;
 import java.util.List;
-
-public  class  MenHRManagerimpl implements HRManagerIF{
-	public static List<People> list = new LinkedList();
+/**
+ *	基于内存
+ * 	list集合实现的
+ * @author ShenBL
+ *
+ */
+public  class  MenListHRManagerimpl implements HRManagerIF{
+	public static List<People> list = new LinkedList<People>();
 	
-	/**
-	 * 查找pid是否存在，存在就返回People
-	 * @param pid
-	 * @return
-	 */
+	
+	 // 查找pid是否存在，存在就返回People
 	private People find(String pid) {
 		System.out.println("执行了find。。。。");
 		for(People people : list ) {

@@ -1,15 +1,14 @@
 package com.yunsi.work0814.service.factory;
 
 
-import com.yunsi.work0814.exception.HRMException;
+
+import java.lang.reflect.Constructor;
 import com.yunsi.work0814.service.HRManagerIF;
-import com.yunsi.work0814.service.impl.DiskHRManagerimpl;
-import com.yunsi.work0814.service.impl.MenHRManagerimpl;
+
 
 public class HRMnagerFactory {
-	
-	
-	public static HRManagerIF autofactory() throws HRMException  {
+/*	简单的工厂
+ * public static HRManagerIF autofactory() throws HRMException  {
 		return autofactory("memory");
 	}
 
@@ -28,6 +27,37 @@ public class HRMnagerFactory {
 			throw new HRMException("初始化存储方式错误！！");
 		}
 		
+	}*/
+	//改用反射
+	public static HRManagerIF autofactory() {
+		return auto("memoryset");
+		
 	}
-	
+	private static HRManagerIF auto(String type){
+		if (type!=null) {
+			if(type.equals("disk")) {
+				return (HRManagerIF)getObject("com.yunsi.work0814.service.impl.DiskHRManagerimpl");
+			}
+			if(type.equals("memorylist")) {
+				return (HRManagerIF)getObject("com.yunsi.work0814.service.impl.MenListHRManagerimpl");
+			}
+			if(type.equals("memoryset")) {
+				return (HRManagerIF)getObject("com.yunsi.work0814.service.impl.MenSetHRManagerimpl");
+			}
+		}
+		return null;
+	}
+	private static Object getObject(String type) {
+			
+			try {
+				Class class1 = Class.forName(type);
+				Constructor constructor = class1.getDeclaredConstructor(new Class[] {});
+				Object instance = constructor.newInstance(new Object[] {});
+				return instance;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null; 
+			
+	}
 }
