@@ -44,15 +44,19 @@ public class Format {
 				buffer = new BufferedReader(new FileReader(PATH));
 				String line = null;
 				while((line=buffer.readLine())!=null) {//读取并添加到set集合中，过程中会被排序
-					list.add(this.test(line));
+					Student student = this.test(line);
+					list.add(student);
 				}
+				
 				Iterator<Student> iterator = list.iterator();
 				while(iterator.hasNext()) {
 					System.out.println(iterator.next());
 				}
+				
 				writer = new PrintWriter(new FileWriter(PATH));
 				for(Student  s : list) {
-					writer.println(s.printInfo());
+					String str2 =s.printInfo();
+					writer.println();
 				}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
