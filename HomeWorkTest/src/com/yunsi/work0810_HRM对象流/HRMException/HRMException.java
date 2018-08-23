@@ -1,4 +1,4 @@
-package com.yunsi.work0810.HRMException;
+package com.yunsi.work0810_HRM¶ÔÏóÁ÷.HRMException;
 
 public class HRMException extends Exception {
 	public HRMException () {

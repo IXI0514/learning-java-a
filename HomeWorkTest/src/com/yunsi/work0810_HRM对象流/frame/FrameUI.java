@@ -1,12 +1,12 @@
-package com.yunsi.work0810.frame;
+package com.yunsi.work0810_HRM对象流.frame;
 /*
  * 	管理界面类
  * 
  */
 import java.util.Scanner;
 
-import com.yunsi.work0810.service.IHRManagement;
-import com.yunsi.work0810.service.impl.HRManagementImpl;
+import com.yunsi.work0810_HRM对象流.service.IHRManagement;
+import com.yunsi.work0810_HRM对象流.service.impl.HRManagementImpl;
 
 public class FrameUI {
 	IHRManagement ihr = new HRManagementImpl();

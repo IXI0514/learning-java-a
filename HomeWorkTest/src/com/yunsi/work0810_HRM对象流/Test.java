@@ -1,8 +1,8 @@
-package com.yunsi.work0810;
+package com.yunsi.work0810_HRM对象流;
 
 
 
-import com.yunsi.work0810.frame.FrameUI;
+import com.yunsi.work0810_HRM对象流.frame.FrameUI;
 
 
 public class Test {

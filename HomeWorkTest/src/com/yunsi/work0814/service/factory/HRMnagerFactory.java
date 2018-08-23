@@ -2,11 +2,39 @@ package com.yunsi.work0814.service.factory;
 
 
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.lang.reflect.Constructor;
+import java.util.Properties;
+
 import com.yunsi.work0814.service.HRManagerIF;
 
 
 public class HRMnagerFactory {
+	//2018年8月22日09:00:23 改读取文件
+	public static HRManagerIF autofactory() {
+		
+		try {
+			Properties properties = new Properties();
+			FileReader fReader = new FileReader("../HomeWorkTest/src/com/yunsi/work0814/service/factory/properties.properties");
+			properties.load(fReader);
+			String str1 = properties.getProperty("impl");
+			Class class1 = Class.forName(str1);
+			Constructor<HRManagerIF> constructor = class1.getConstructor();
+			HRManagerIF object = constructor.newInstance();
+			System.out.println(object);
+			return object;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Class class1 = Class.forName(className)
+		return null;
+	}
+	
+	
+	
+	
 /*	简单的工厂
  * public static HRManagerIF autofactory() throws HRMException  {
 		return autofactory("memory");
@@ -28,7 +56,7 @@ public class HRMnagerFactory {
 		}
 		
 	}*/
-	//改用反射
+	/*//改用反射
 	public static HRManagerIF autofactory() {
 		return auto("memoryset");
 		
@@ -59,5 +87,5 @@ public class HRMnagerFactory {
 			}
 			return null; 
 			
-	}
+	}*/
 }

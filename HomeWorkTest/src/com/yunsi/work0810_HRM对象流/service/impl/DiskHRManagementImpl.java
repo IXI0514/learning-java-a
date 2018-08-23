@@ -1,4 +1,4 @@
-package com.yunsi.work0810.service.impl;
+package com.yunsi.work0810_HRM对象流.service.impl;
 
 import java.io.EOFException;
 import java.io.File;
@@ -11,9 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-
-import com.yunsi.work0810.beans.People;
-import com.yunsi.work0810.service.IDiskHRManagement;
+import com.yunsi.work0810_HRM对象流.beans.People;
+import com.yunsi.work0810_HRM对象流.service.IDiskHRManagement;
 
 /**
  * 

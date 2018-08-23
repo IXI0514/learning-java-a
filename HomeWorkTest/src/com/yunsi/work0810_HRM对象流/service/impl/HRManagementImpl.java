@@ -1,15 +1,14 @@
-package com.yunsi.work0810.service.impl;
+package com.yunsi.work0810_HRM对象流.service.impl;
 
-import com.yunsi.work0810.beans.People;
-import com.yunsi.work0810.frame.FrameUI;
-import com.yunsi.work0810.service.IDiskHRManagement;
-import com.yunsi.work0810.service.IHRManagement;
 import java.util.Arrays;
 
 import javax.management.RuntimeErrorException;
 
-import com.yunsi.work0810.HRMException.HRMException;
-import com.yunsi.work0810.beans.*;
+import com.yunsi.work0810_HRM对象流.HRMException.HRMException;
+import com.yunsi.work0810_HRM对象流.beans.*;
+import com.yunsi.work0810_HRM对象流.frame.FrameUI;
+import com.yunsi.work0810_HRM对象流.service.IDiskHRManagement;
+import com.yunsi.work0810_HRM对象流.service.IHRManagement;
 
 public  class HRManagementImpl implements IHRManagement{
 	

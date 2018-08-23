@@ -1,4 +1,4 @@
-package com.yunsi.work0810.beans;
+package com.yunsi.work0810_HRM¶ÔÏóÁ÷.beans;
 
 public class Student extends People{
 	private String major;

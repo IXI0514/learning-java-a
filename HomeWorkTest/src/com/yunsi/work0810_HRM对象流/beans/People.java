@@ -1,5 +1,5 @@
 
-package com.yunsi.work0810.beans;
+package com.yunsi.work0810_HRM¶ÔÏóÁ÷.beans;
 
 import java.io.Serializable;
 
