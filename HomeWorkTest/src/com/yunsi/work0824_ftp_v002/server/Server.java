@@ -181,9 +181,10 @@ public class Server implements Runnable{
 	private void serUpload(File file) throws IOException {
 		// TODO Auto-generated method stub
 		lout = new BufferedOutputStream(new FileOutputStream(file));
-		/*	int len = -1;
+		/*int len = -1;
 		while((len=sin.read(inbuf))!=-1) {
-			lout.write(inbuf);
+			lout.write(inbuf,0,len);
+			lout.flush();
 		}
 		lout.close();
 		System.out.println("end11");*/

@@ -92,13 +92,17 @@ public class Client {
 			localDir();
 		} else if (command.startsWith("cd")) {
 			serverCd(command);
-		} else if (command.equalsIgnoreCase("lcd")) {
+			serverDir(command);
+		} else if (command.startsWith("lcd")) {
 			localCd(command);
+			localDir();
 		} else if (command.startsWith("get")) {
 			getFile(command);
 		} else if (command.startsWith("put")) {
 			upload(command);
 			
+		} else {
+			System.out.println("命令输入错误！！");
 		}
 		
 	}
@@ -162,6 +166,7 @@ public class Client {
 	 */
 	private void localCd(String command) {
 		String pathname =command.substring(3).trim();
+
 		if (pathname.equalsIgnoreCase("..")) {
 			if(localpath.equals(localpath0)) {
 				pathname = "getparenterror";//防止访问本地目录的父级目录
@@ -170,7 +175,9 @@ public class Client {
 				pathname =file.getParent();
 			}
 		}else {
+			
 			pathname =localpath+File.separator+pathname;
+			//System.out.println(pathname);
 		}
 		File path = new File(pathname);
 		if (!path.exists()) {
@@ -248,6 +255,12 @@ public class Client {
 			sout.flush();
 			sout.write("end!".getBytes());//end 结束标识
 			sout.flush();
+			
+			/*while((len=lin.read(inbuf))!=-1) {
+				sout.write(inbuf, 0, len);
+			}
+			lin.close();
+			sout.flush();*/
 			System.out.println("已上传 #"+pathname+"# 至["+socket.getInetAddress()+":"+socket.getPort()+"]");
 			lin = new BufferedInputStream(new FileInputStream(path));
 		}else {
