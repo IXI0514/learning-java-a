@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -20,7 +21,7 @@ public class Server implements Runnable{
 	private BufferedOutputStream sout ;//socket输出流
 	private BufferedInputStream lin;//本地输入流
 	private BufferedOutputStream lout;//本地输出流
-
+	private byte[] buflen = new byte[4];//读取数组长度
 	private byte[] inbuf = new byte[1024];//读取时用的数组
 	private String serverpath;//当前服务端目录  全路径
 	//private String localpath;//当前本地目录
@@ -76,10 +77,12 @@ public class Server implements Runnable{
 		}else if (com[0].equalsIgnoreCase("get")) {
 			serGet(file);	
 		}else if (com[0].equalsIgnoreCase("put")) {
-			serGet(file);	
+			serUpload(file);	
 		}
 		
 	}
+
+	
 
 	
 
@@ -153,25 +156,19 @@ public class Server implements Runnable{
 	private void serGet(File file) throws IOException {
 		//
 		if (file.exists()&&file.isFile()) {
-			
 			sout.write("start".getBytes());
 			sout.flush();
 			//读取本地文件 字节流
 			lin = new BufferedInputStream(new FileInputStream(file));
 			int len = -1;
-			int i=1;
 			while((len=lin.read(inbuf))!=-1) {
-				
 				//要读多长
 				String str = String.format("%04d", len);
 				sout.write(str.getBytes());
 				sout.write(inbuf, 0, len);
-				System.out.println(i);
-				System.out.println(new String (inbuf,0,len));
 			}
-			System.out.println("123end");
 			sout.flush();
-			sout.write("end".getBytes());//end 结束标识
+			sout.write("end!".getBytes());//end 结束标识
 			sout.flush();
 			System.out.println("客户端: ["+socket.getInetAddress()+":"+socket.getPort()+"]请求获取"+file.getPath());
 		}else {
@@ -180,6 +177,31 @@ public class Server implements Runnable{
 		}
 		
 	}//end serGet
+	
+	private void serUpload(File file) throws IOException {
+		// TODO Auto-generated method stub
+		lout = new BufferedOutputStream(new FileOutputStream(file));
+		/*	int len = -1;
+		while((len=sin.read(inbuf))!=-1) {
+			lout.write(inbuf);
+		}
+		lout.close();
+		System.out.println("end11");*/
+		while (true) {//先获取每组长度，再进行接收
+			sin.read(buflen);
+			String temp = new String(buflen);
+			//System.out.println(temp);//check
+			if(temp.contains("end")) {
+				lout.close();
+				System.out.println("客户端: ["+socket.getInetAddress()+":"+socket.getPort()+"]上传#"+file.getPath()+"#成功");
+				break ;
+			}
+			int blen = Integer.parseInt(temp);
+			inbuf = new byte[blen];
+			sin.read(inbuf);
+			lout.write(inbuf);//写到本地目录
+		}	
+	}
 	
 	/**************
 	 * 

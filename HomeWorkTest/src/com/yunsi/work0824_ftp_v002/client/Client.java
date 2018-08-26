@@ -19,11 +19,13 @@ public class Client {
 	private BufferedInputStream lin;//本地输入流
 	private BufferedOutputStream lout;//本地输出流
 	private BufferedReader keybuff;//从键盘读取
-	private byte[] buflen = new byte[4];//读取时用的数组1
+	private byte[] buflen = new byte[4];//读取数组长度
 	private byte[] inbuf = new byte[1024];//读取时用的数组
 	
 	//private byte[] sobuf ;//传输
-	private String serverpath;//当前服务端目录  全路径
+	private String serverpath0;//当前服务端目录  不变
+	private String serverpath;//当前服务端目录 
+	private String localpath0 = "F:/temp";//当前本地目录 不变
 	private String localpath = "F:/temp";//当前本地目录
 	
 	
@@ -47,14 +49,16 @@ public class Client {
 		//获取返回目录
 		int len = sin.read(inbuf);
 		serverpath=new String(inbuf,0,len);//接收初始服务端目录
+		serverpath0 = new String(inbuf,0,len);
 		System.out.println("当前服务端目录："+serverpath);//check
-		System.out.println("outpath2");
+		
 		while (true) {//不断读取控制台的命令
 			System.out.print("ftp>>");
 			String input = keybuff.readLine();//从键盘读一行(命令)
 			if (input.equalsIgnoreCase("exit")) {//退出
 				sout.write("exit".getBytes());//发送退出命令到服务端
 				sout.flush();
+				System.out.println("已与服务器断开连接...");
 				break;//退出while()	
 			}
 			actionList(input);//处理命令
@@ -79,9 +83,9 @@ public class Client {
 					+ "put：上传当前本地工作目录中的文件\n"
 					+ "exit：退出，与服务器断开连接"); 
 		} else if (command.equalsIgnoreCase("pwd")) {
-			System.out.println(serverpath);
+			System.out.println("当前服务端工作目录"+serverpath);
 		} else if (command.equalsIgnoreCase("lpwd")) {
-			System.out.println(localpath);
+			System.out.println("当前本地工作目录"+localpath);
 		} else if (command.equalsIgnoreCase("dir")) {
 			serverDir(command);
 		} else if (command.equalsIgnoreCase("ldir")) {
@@ -89,11 +93,11 @@ public class Client {
 		} else if (command.startsWith("cd")) {
 			serverCd(command);
 		} else if (command.equalsIgnoreCase("lcd")) {
-			localCD(command);
+			localCd(command);
 		} else if (command.startsWith("get")) {
 			getFile(command);
-		} else if (command.equalsIgnoreCase("put")) {
-			put(command);
+		} else if (command.startsWith("put")) {
+			upload(command);
 			
 		}
 		
@@ -113,7 +117,6 @@ public class Client {
 		int len = 0;//读取回复
 		StringBuilder builder=new StringBuilder();
 		while(((len=sin.read(inbuf))!=0)&&!((new String(inbuf,0,len)).equals("end"))) {
-			System.out.println("2");
 			builder.append(new String(inbuf,0,len));
 		}
 		  		
@@ -132,8 +135,12 @@ public class Client {
 	private void serverCd(String command) throws IOException {
 		String pathname =command.substring(2).trim();//目录名称
 		if (pathname.equalsIgnoreCase("..")) {
-			File file =new File(serverpath);
-			pathname =file.getParent();//获取父目录传到服务端验证
+			if(serverpath.equals(serverpath0)) {
+				pathname = "getparenterror";//防止非法访问服务端目录的父级目录
+			}else {
+				File file =new File(serverpath);
+				pathname =file.getParent();//获取父目录传到服务端验证
+			}
 		}else {
 			pathname =serverpath+File.separator+pathname;//验证跳转之后的目录
 		}
@@ -145,8 +152,36 @@ public class Client {
 			serverpath=pathname;
 		}
 		System.out.println(restr);
-		
 	}//end serverCd
+	
+
+	/**
+	 * localCd
+	 * 处理本地文件夹跳转
+	 * @param pathname
+	 */
+	private void localCd(String command) {
+		String pathname =command.substring(3).trim();
+		if (pathname.equalsIgnoreCase("..")) {
+			if(localpath.equals(localpath0)) {
+				pathname = "getparenterror";//防止访问本地目录的父级目录
+			}else {
+				File file =new File(localpath);
+				pathname =file.getParent();
+			}
+		}else {
+			pathname =localpath+File.separator+pathname;
+		}
+		File path = new File(pathname);
+		if (!path.exists()) {
+			System.out.println("Error：目录不存在！！！");
+		}else if (path.isFile()){
+			System.out.println("Error：目录是文件不支持跳转！！！");
+		}else {
+			localpath = pathname;
+			System.out.println("当前本地目录："+localpath);	
+		}
+	}
 	
 	/**
 	 * getFile
@@ -162,99 +197,64 @@ public class Client {
 		
 		int len = sin.read(inbuf);
 		String restr= new String(inbuf,0,len);//确认返回值
-		System.out.println(restr);//check
+		//System.out.println(restr);//check
 		//确认服务端是否存在文件 ,再执行操作
 		if(restr.startsWith("start")) {
 			lout = new BufferedOutputStream(new FileOutputStream(localpath+File.separator+pathname));
-			System.out.println("0");
-			int i=1;
-			
-			while (true) {
-				len=sin.read(buflen);
+			while (true) {//先获取每组长度，再进行接收
+				sin.read(buflen);
 				String temp = new String(buflen);
-				System.out.println(temp);//
+				//System.out.println(temp);//check
 				if(temp.contains("end")) {
-					lout.flush();
+					lout.close();
 					System.out.println("获取文件["+pathname+"]完成");
 					break ;
 				}
-
 				int blen = Integer.parseInt(temp);
 				inbuf = new byte[blen];
-				len=sin.read(inbuf);
-				
-				i++;
-				System.out.println(i+" :"+temp);
+				sin.read(inbuf);
 				lout.write(inbuf);//写到本地目录
-				
-			}
-				
+			}	
 		}else if (restr.startsWith("Error")) {
-			System.out.println("re:"+restr);
+			System.out.println(restr);
 		} else {
 			System.out.println("未知返回值："+restr);
 		}
 	}//end getFile
 	
 	/**
-	 * put
+	 * upload
 	 * 处理上传文件
 	 * @param command
 	 * @throws IOException 
 	 */
-	private void put(String command) throws IOException {
+	private void upload(String command) throws IOException {
 		String pathname =command.substring(3).trim();//文件名称
 		File path = new File(localpath+File.separator+pathname);
 		//验证本地目录是否存在 且传输的是文件
+		/*System.out.println(path);
+		System.out.println(path.exists()&&path.isFile());*/
 		if(path.exists()&&path.isFile()) {
-			sout.write((serverpath+File.separator+pathname).getBytes());//传输要在服务端创建的路径
+			sout.write(("put@"+serverpath+File.separator+pathname).getBytes());//传输要在服务端创建的路径
 			sout.flush();
 			lin = new BufferedInputStream(new FileInputStream(path));
 			int len = -1;
 			while((len=lin.read(inbuf))!=-1) {
+				//要读多长
+				String str = String.format("%04d", len);
+				sout.write(str.getBytes());
 				sout.write(inbuf, 0, len);
-				sout.flush();
 			}
-			sout.write("end".getBytes());
 			sout.flush();
+			sout.write("end!".getBytes());//end 结束标识
+			sout.flush();
+			System.out.println("已上传 #"+pathname+"# 至["+socket.getInetAddress()+":"+socket.getPort()+"]");
+			lin = new BufferedInputStream(new FileInputStream(path));
 		}else {
-			System.out.println("输入文件参数不正确！！！");
+			System.out.println("请输入正确的文件名！！");
 		}	
-		
-	}
+	}//end upLoad
 
-	
-
-	
-	
-	
-
-	
-
-	/**
-	 * lcd
-	 * 处理本地文件夹跳转
-	 * @param pathname
-	 */
-	private void localCD(String command) {
-		String pathname =command.substring(3).trim();
-		if (pathname.equalsIgnoreCase("..")) {
-			File file =new File(serverpath);
-			pathname =file.getParent();
-		}else {
-			pathname =serverpath+File.separator+pathname;
-		}
-		File path = new File(pathname);
-		if (!path.exists()) {
-			System.out.println("Error：目录不存在！！！");//error是客户端识别标识
-		}else if (path.isFile()){
-			System.out.println("Error：目录是文件不支持跳转！！！");
-		}else {
-			localpath = pathname;
-			System.out.println("当前本地目录："+localpath);	
-		}
-	}
-	
 	/**
 	 * 
 	 * 格式化输出 (获取+时间+类型+大小+文件名)字符串 
@@ -310,11 +310,19 @@ public class Client {
 	}
 	private String getsize(File f) {//2获取文件大小
 		if (f.isFile()) {
-			return formate( f.length());
+			if(f.length()<1024) {
+				//System.out.println("["+f.length()+"]");
+				return "<1M";
+			}
+			return formate( f.length()/1024)+"M";
 		}else {
 			DirSize=0;
 			getDirSize(f);
-			return formate(DirSize);
+			if(DirSize<1024) {
+				//System.out.println("["+f.length()+"]");
+				return "<1M";
+			}
+			return formate(DirSize/1024)+"M";
 		}
 	}
 	private void getDirSize(File file) {//2.5获取文件夹大小
